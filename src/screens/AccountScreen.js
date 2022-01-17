@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-
-import { Searchbar } from "react-native-paper";
 import { collection, getDocs } from "firebase/firestore/lite";
 
 import { signOut } from "firebase/auth";
 import { auth, db, Colors } from "../config";
 import { Button, View } from "../components";
 
-export const HomeScreen = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-
+export const AccountScreen = () => {
   const handleLogout = () => {
     signOut(auth).catch((error) => console.log("Error logging out: ", error));
   };
@@ -26,25 +22,11 @@ export const HomeScreen = () => {
     getBeaches();
   }, []);
 
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const onChangeSearch = (query) => setSearchQuery(query);
-
   return (
     <View
       isSafe
       style={{ flex: 1, backgroundColor: Colors.white, paddingHorizontal: 12 }}
     >
-      <Searchbar
-        selectionColor={Colors.primary}
-        placeholder="Search"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        style={{
-          marginTop: "3%",
-          marginBottom: "3%",
-          padding: "1%",
-        }}
-      />
       <Button onPress={handleLogout} title="Logout" />
     </View>
   );

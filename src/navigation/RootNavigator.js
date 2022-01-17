@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { onAuthStateChanged } from "firebase/auth";
 
 import { AuthStack } from "./AuthStack";
-import { AppStack } from "./AppStack";
+import { AppDrawer } from "./AppDrawer";
 import { AuthenticatedUserContext } from "../providers";
 import { LoadingIndicator } from "../components";
 import { auth } from "../config";
@@ -32,7 +32,7 @@ export const RootNavigator = () => {
 
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
+      {user ? <AppDrawer /> : <AuthStack />}
     </NavigationContainer>
   );
 };
