@@ -1,0 +1,21 @@
+{
+  "cli": {
+    "version": ">= 0.44.1"
+  },
+  "build": {
+    "alpha": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "beta": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "stable": {
+      "developmentClient": true
+    },
+    "production": {}
+  }
+}
