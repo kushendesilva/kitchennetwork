@@ -9,10 +9,10 @@
 
 - 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v0.2.1-beta/kitchennetwork.apk" target="blank">**here**</a>
 
-|                                                                     |                                                                     |                                                                     |
-| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: |
-| <img width="1604" alt="screenshot" src="/assets/screenshots/1.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/2.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/3.png"> |
-| <img width="1604" alt="screenshot" src="/assets/screenshots/4.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/5.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/6.png"> |
+|                                                                          |                                                                          |                                                                          |
+| :----------------------------------------------------------------------: | :----------------------------------------------------------------------: | :----------------------------------------------------------------------: |
+| <img width="1604" alt="screenshot" src="/assets/previews/preview-1.png"> | <img width="1604" alt="screenshot" src="/assets/previews/preview-2.png"> | <img width="1604" alt="screenshot" src="/assets/previews/preview-3.png"> |
+| <img width="1604" alt="screenshot" src="/assets/previews/preview-4.png"> | <img width="1604" alt="screenshot" src="/assets/previews/preview-5.png"> | <img width="1604" alt="screenshot" src="/assets/previews/preview-6.png"> |
 
 <h3 align="left">Socials</h3>
 <p align="left">
