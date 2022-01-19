@@ -6,7 +6,7 @@ export default {
     slug: "kitchennetwork",
     owner: "kushenthimira",
     platforms: ["android"],
-    version: "0.1.0-alpha",
+    version: "0.2.0-beta",
     orientation: "portrait",
     icon: "./assets/logo.png",
     splash: {

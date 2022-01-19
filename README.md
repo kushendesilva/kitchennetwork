@@ -7,12 +7,12 @@
 
 <h3 align="left">Resources</h3>
 
-- 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v0.1.0-alpha/kitchennetwork.apk" target="blank">**here**</a>
+- 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v0.2.0-beta/kitchennetwork.apk" target="blank">**here**</a>
 
 |                                                                     |                                                                     |                                                                     |
 | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: |
 | <img width="1604" alt="screenshot" src="/assets/screenshots/1.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/2.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/3.png"> |
-| <img width="1604" alt="screenshot" src="/assets/screenshots/4.png"> |     <img width="1604" alt="screenshot" src="/assets/logo.png">      |     <img width="1604" alt="screenshot" src="/assets/logo.png">      |
+| <img width="1604" alt="screenshot" src="/assets/screenshots/4.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/5.png"> | <img width="1604" alt="screenshot" src="/assets/screenshots/6.png"> |
 
 <h3 align="left">Socials</h3>
 <p align="left">

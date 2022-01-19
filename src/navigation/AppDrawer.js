@@ -1,7 +1,7 @@
 import * as React from "react";
 import { AppStack } from "./AppStack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import DrawerContainer from "../screens/DrawerContainer/DrawerContainer";
+import DrawerContainer from "../screens/DrawerContainer";
 
 const Drawer = createDrawerNavigator();
 

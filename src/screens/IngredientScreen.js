@@ -1,18 +1,13 @@
 import React, { useLayoutEffect } from "react";
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-  Image,
-  TouchableHighlight,
-} from "react-native";
-import styles from "./styles";
+import { FlatList, StyleSheet, Text, Image } from "react-native";
+import { Card, Title, Paragraph } from "react-native-paper";
 import {
   getIngredientUrl,
   getRecipesByIngredient,
   getCategoryName,
-} from "../../data/MockDataAPI";
+} from "../data/MockDataAPI";
+import { RecipeCard } from "../config/AppStyles";
+import { View } from "../components";
 
 export default function IngredientScreen(props) {
   const { navigation, route } = props;
@@ -32,27 +27,19 @@ export default function IngredientScreen(props) {
   };
 
   const renderRecipes = ({ item }) => (
-    <TouchableHighlight
-      underlayColor="rgba(73,182,77,0.9)"
-      onPress={() => onPressRecipe(item)}
-    >
-      <TouchableHighlight
-        underlayColor="rgba(73,182,77,0.9)"
-        onPress={() => onPressRecipe(item)}
-      >
-        <View style={styles.container}>
-          <Image style={styles.photo} source={{ uri: item.photo_url }} />
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.category}>
-            {getCategoryName(item.categoryId)}
-          </Text>
-        </View>
-      </TouchableHighlight>
-    </TouchableHighlight>
+    <Card style={styles.container} onPress={() => onPressRecipe(item)}>
+      <Card.Cover style={styles.photo} source={{ uri: item.photo_url }} />
+      <Card.Content>
+        <Title style={styles.title}>{item.title}</Title>
+        <Paragraph style={styles.category}>
+          {getCategoryName(item.categoryId)}
+        </Paragraph>
+      </Card.Content>
+    </Card>
   );
 
   return (
-    <View style={styles.mainContainer}>
+    <View isSafe style={styles.mainContainer}>
       <FlatList
         ListHeaderComponent={
           <>
@@ -69,7 +56,7 @@ export default function IngredientScreen(props) {
               />
             </View>
             <Text style={styles.ingredientInfo}>
-              Recipes with {ingredientName}:
+              Recipes with {ingredientName}
             </Text>
           </>
         }
@@ -83,3 +70,26 @@ export default function IngredientScreen(props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  titleIngredient: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  photoIngredient: {
+    width: "100%",
+    height: 250,
+    alignSelf: "center",
+  },
+  ingredientInfo: {
+    color: "black",
+    margin: "2%",
+    fontSize: 18,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  container: RecipeCard.container,
+  photo: RecipeCard.photo,
+  title: RecipeCard.title,
+  category: RecipeCard.category,
+});

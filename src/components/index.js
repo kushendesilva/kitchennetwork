@@ -5,6 +5,7 @@ import { Icon } from "./Icon";
 import { Button } from "./Button";
 import { FormErrorMessage } from "./FormErrorMessage";
 import { LoadingIndicator } from "./LoadingIndicator";
+import MenuImage from "./MenuImage";
 
 export {
   View,
@@ -14,4 +15,5 @@ export {
   Button,
   FormErrorMessage,
   LoadingIndicator,
+  MenuImage,
 };

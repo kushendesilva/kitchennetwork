@@ -9,7 +9,7 @@ export const View = ({ isSafe, style, children }) => {
 
   if (isSafe) {
     return (
-      <Surface style={{ paddingTop: insets.top, ...style }}>
+      <Surface style={{ paddingTop: insets.top, ...style, flex: 1 }}>
         <StatusBar backgroundColor={Colors.primary} barStyle="light-content" />
         {children}
       </Surface>
