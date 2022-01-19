@@ -3,19 +3,10 @@
     "version": ">= 0.44.1"
   },
   "build": {
-    "alpha": {
+    "default": {
       "android": {
         "buildType": "apk"
       }
-    },
-    "beta": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
-    "stable": {
-      "developmentClient": true
-    },
-    "production": {}
+    }
   }
 }

@@ -1,24 +1,13 @@
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { FlatList, Image, StyleSheet } from "react-native";
 import { Card, Text, Caption } from "react-native-paper";
-import { View, MenuImage } from "../components";
+import { View } from "../components";
 import { categories } from "../data/dataArrays";
 import { getNumberOfRecipes } from "../data/MockDataAPI";
+import { Appbar } from "react-native-paper";
 
 export default function CategoriesScreen(props) {
   const { navigation } = props;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <MenuImage
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-        />
-      ),
-    });
-  }, []);
 
   const onPressCategory = (item) => {
     const title = item.name;
@@ -43,6 +32,15 @@ export default function CategoriesScreen(props) {
 
   return (
     <View isSafe>
+      <Appbar>
+        <Appbar.Action
+          icon="menu"
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        />
+        <Appbar.Content title="Categories" />
+      </Appbar>
       <FlatList
         data={categories}
         renderItem={renderCategory}

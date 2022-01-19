@@ -75,21 +75,6 @@ export default function DrawerContainer(props) {
                 />
               )}
             />
-            <DrawerItem
-              labelStyle={{ color: Colors.black }}
-              label="Search"
-              onPress={() => {
-                navigation.navigate("Search");
-                navigation.closeDrawer();
-              }}
-              icon={({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="magnify"
-                  color={Colors.primary}
-                  size={size}
-                />
-              )}
-            />
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>

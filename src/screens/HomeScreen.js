@@ -1,26 +1,14 @@
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { RecipeCard } from "../config/AppStyles";
 import { FlatList, StyleSheet } from "react-native";
 import { Card, Title, Paragraph } from "react-native-paper";
 import { recipes } from "../data/dataArrays";
 import { getCategoryName } from "../data/MockDataAPI";
-import { View, MenuImage } from "../components";
+import { View } from "../components";
+import { Appbar } from "react-native-paper";
 
 export default function HomeScreen(props) {
   const { navigation } = props;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <MenuImage
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-        />
-      ),
-      headerRight: () => <View />,
-    });
-  }, []);
 
   const onPressRecipe = (item) => {
     navigation.navigate("Recipe", { item });
@@ -40,6 +28,21 @@ export default function HomeScreen(props) {
 
   return (
     <View isSafe>
+      <Appbar>
+        <Appbar.Action
+          icon="menu"
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        />
+        <Appbar.Content title="Home" />
+        <Appbar.Action
+          icon="magnify"
+          onPress={() => {
+            navigation.navigate("Search");
+          }}
+        />
+      </Appbar>
       <FlatList
         vertical
         showsVerticalScrollIndicator={false}

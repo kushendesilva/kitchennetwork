@@ -1,41 +1,27 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import {
   getCategoryName,
   getRecipesByRecipeName,
   getRecipesByCategoryName,
 } from "../data/MockDataAPI";
-import { Searchbar, Card, Title, Paragraph, Caption } from "react-native-paper";
+import {
+  Searchbar,
+  Card,
+  Title,
+  Paragraph,
+  Caption,
+  Appbar,
+} from "react-native-paper";
 import { RecipeCard } from "../config/AppStyles";
-import { View, MenuImage } from "../components";
+import { View } from "../components";
+import { Colors } from "../config";
 
 export default function SearchScreen(props) {
   const { navigation } = props;
 
   const [value, setValue] = useState("");
   const [data, setData] = useState([]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <View style={{ flexDirection: "row", width: "100%" }}>
-          <MenuImage
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          />
-          <Searchbar
-            placeholder="Search"
-            onChangeText={handleSearch}
-            value={value}
-            style={{ width: "85%", elevation: 0 }}
-          />
-        </View>
-      ),
-    });
-  }, [value]);
-
-  useEffect(() => {}, [value]);
 
   const handleSearch = (text) => {
     setValue(text);
@@ -69,6 +55,28 @@ export default function SearchScreen(props) {
 
   return (
     <View isSafe>
+      <Appbar>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+
+        <Searchbar
+          selectionColor={Colors.white}
+          placeholder="Search"
+          placeholderTextColor={Colors.white}
+          onChangeText={handleSearch}
+          value={value}
+          inputStyle={{ backgroundColor: Colors.primary, color: Colors.white }}
+          style={{
+            width: "85%",
+            elevation: 0,
+            backgroundColor: Colors.primary,
+          }}
+          iconColor={Colors.white}
+        />
+      </Appbar>
       <FlatList
         vertical
         showsVerticalScrollIndicator={false}

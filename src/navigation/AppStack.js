@@ -10,14 +10,32 @@ import {
   SearchScreen,
   IngredientsDetailsScreen,
 } from "../screens";
+import { Colors } from "../config";
 
 const Stack = createStackNavigator();
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Categories" component={CategoriesScreen} />
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary },
+        headerTintColor: Colors.white,
+      }}
+    >
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
       <Stack.Screen name="RecipesList" component={RecipesListScreen} />
       <Stack.Screen name="Ingredient" component={IngredientScreen} />
@@ -25,7 +43,7 @@ export const AppStack = () => {
         name="Search"
         component={SearchScreen}
         options={{
-          title: "",
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -36,7 +54,7 @@ export const AppStack = () => {
         name="Account"
         component={AccountScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
