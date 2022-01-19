@@ -1,7 +1,14 @@
 import React from "react";
 import { Button as PaperButton } from "react-native-paper";
 
-export const Button = ({ onPress, text = false, icon, title, style }) => {
+export const Button = ({
+  onPress,
+  text = false,
+  icon,
+  title,
+  style,
+  disabled = false,
+}) => {
   if (text) {
     return (
       <PaperButton
@@ -16,6 +23,7 @@ export const Button = ({ onPress, text = false, icon, title, style }) => {
 
   return (
     <PaperButton
+      disabled={disabled}
       icon={icon}
       mode="contained"
       onPress={onPress}

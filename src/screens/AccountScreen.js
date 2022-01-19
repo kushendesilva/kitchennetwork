@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore/lite";
+import React, { useEffect } from "react";
 import { Appbar, Button, FAB, Avatar, Text } from "react-native-paper";
 import { StyleSheet } from "react-native";
-
+import { getDoc, doc } from "firebase/firestore/lite";
+import AppRenderIf from "../config/AppRenderIf";
 import { signOut } from "firebase/auth";
 import { auth, Colors, db } from "../config";
 import { View } from "../components";
@@ -13,21 +13,27 @@ export const AccountScreen = (props) => {
   const userEmail =
     auth.currentUser.email.charAt(0).toUpperCase() +
     auth.currentUser.email.slice(1);
+  const userID = auth.currentUser.uid;
 
   const handleLogout = () => {
     signOut(auth).catch((error) => console.log("Error logging out: ", error));
   };
 
-  const [beaches, setBeaches] = useState([]);
-  const beachesCollectionRef = collection(db, "beaches");
+  const [user, setUser] = React.useState([]);
 
   useEffect(() => {
-    const getBeaches = async () => {
-      const data = await getDocs(beachesCollectionRef);
-      setBeaches(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    const getNote = async () => {
+      const docSnap = await getDoc(doc(db, "users", userID));
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        setUser(userData);
+      } else {
+        const userData = ["Empty"];
+        setUser(userData);
+      }
     };
 
-    getBeaches();
+    getNote();
   }, []);
 
   return (
@@ -42,23 +48,74 @@ export const AccountScreen = (props) => {
         <Appbar.Content title="Account" />
       </Appbar>
       <View style={styles.accountTop}>
-        <FAB style={styles.fab} small icon="pen" />
+        <FAB
+          style={styles.fab}
+          small
+          icon="pencil"
+          onPress={() =>
+            navigation.navigate("AccountEdit", {
+              user: {
+                name: user.name,
+                email: userEmail,
+                id: userID,
+              },
+            })
+          }
+        />
         <Avatar.Icon
           size={80}
           icon="account"
           color={Colors.primary}
           style={{ backgroundColor: Colors.white }}
         />
+        {AppRenderIf(
+          user != "Empty",
+          <Text
+            style={{
+              color: Colors.white,
+              marginTop: "2%",
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            {user.name}
+          </Text>
+        )}
+        {AppRenderIf(
+          user == "Empty",
+          <Button
+            style={{
+              padding: "1%",
+              margin: "2%",
+              marginTop: "4%",
+              borderColor: Colors.white,
+            }}
+            color={Colors.white}
+            mode="outlined"
+            onPress={() =>
+              navigation.navigate("AccountEdit", {
+                user: {
+                  name: "",
+                  email: userEmail,
+                  id: userID,
+                },
+              })
+            }
+          >
+            Add Name
+          </Button>
+        )}
+
         <Text
           style={{
             color: Colors.white,
             margin: "2%",
-            fontSize: 14,
-            fontWeight: "bold",
+            fontSize: 12,
           }}
         >
           {userEmail}
         </Text>
+
         <Button
           style={{ padding: "1%", margin: "2%" }}
           color={Colors.white}

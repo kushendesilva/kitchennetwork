@@ -63,6 +63,7 @@ export default function SearchScreen(props) {
         />
 
         <Searchbar
+          autoFocus={true}
           selectionColor={Colors.white}
           placeholder="Search"
           placeholderTextColor={Colors.white}

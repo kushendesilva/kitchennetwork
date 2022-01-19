@@ -9,6 +9,7 @@ import RecipesListScreen from "./RecipesListScreen";
 import IngredientScreen from "./IngredientScreen";
 import SearchScreen from "./SearchScreen";
 import IngredientsDetailsScreen from "./IngredientsDetailsScreen";
+import AccountEditScreen from "./AccountEditScreen";
 
 export {
   LoginScreen,
@@ -22,4 +23,5 @@ export {
   IngredientScreen,
   SearchScreen,
   IngredientsDetailsScreen,
+  AccountEditScreen,
 };

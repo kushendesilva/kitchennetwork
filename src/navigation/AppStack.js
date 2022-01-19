@@ -9,6 +9,7 @@ import {
   IngredientScreen,
   SearchScreen,
   IngredientsDetailsScreen,
+  AccountEditScreen,
 } from "../screens";
 import { Colors } from "../config";
 
@@ -55,6 +56,13 @@ export const AppStack = () => {
         component={AccountScreen}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AccountEdit"
+        component={AccountEditScreen}
+        options={{
+          title: "Edit Information",
         }}
       />
     </Stack.Navigator>

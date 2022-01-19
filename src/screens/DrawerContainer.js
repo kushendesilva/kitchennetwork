@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Share, TouchableNativeFeedback } from "react-native";
 import { DrawerItem, DrawerContentScrollView } from "@react-navigation/drawer";
-import { Drawer, Divider, Caption, Avatar } from "react-native-paper";
+import {
+  Drawer,
+  Divider,
+  Caption,
+  Avatar,
+  Text,
+  Button,
+  Title,
+} from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import { signOut } from "firebase/auth";
-import { auth, Colors } from "../config";
+import { getDoc, doc } from "firebase/firestore/lite";
+import AppRenderIf from "../config/AppRenderIf";
+import { auth, Colors, db } from "../config";
 
 export default function DrawerContainer(props) {
   const { navigation } = props;
@@ -13,6 +23,24 @@ export default function DrawerContainer(props) {
   const userEmail =
     auth.currentUser.email.charAt(0).toUpperCase() +
     auth.currentUser.email.slice(1);
+
+  const userID = auth.currentUser.uid;
+  const [user, setUser] = React.useState([]);
+
+  useEffect(() => {
+    const getNote = async () => {
+      const docSnap = await getDoc(doc(db, "users", userID));
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        setUser(userData);
+      } else {
+        const userData = ["Empty"];
+        setUser(userData);
+      }
+    };
+
+    getNote();
+  }, []);
 
   const messageDetails =
     "Hey, \nGet Kitchen Network for free at https://github.com/kushenthimira/kitchennetwork";
@@ -38,7 +66,25 @@ export default function DrawerContainer(props) {
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row", marginTop: 15 }}>
                 <Avatar.Icon size={50} icon="account-outline" />
-                <Caption style={styles.caption}>{userEmail}</Caption>
+                {AppRenderIf(
+                  user != "Empty",
+                  <View style={{ marginLeft: 15, flexDirection: "column" }}>
+                    <Title style={styles.title}>{user.name}</Title>
+                    <Caption style={styles.caption}>{userEmail}</Caption>
+                  </View>
+                )}
+                {AppRenderIf(
+                  user == "Empty",
+                  <Title
+                    style={{
+                      fontSize: 16,
+                      alignSelf: "center",
+                      marginLeft: "5%",
+                    }}
+                  >
+                    {userEmail}
+                  </Title>
+                )}
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -124,10 +170,8 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 14,
-    fontWeight: "bold",
+    lineHeight: 14,
     color: Colors.black,
-    alignSelf: "center",
-    margin: "3%",
   },
   row: {
     marginTop: 20,
