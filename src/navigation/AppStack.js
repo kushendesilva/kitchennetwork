@@ -6,8 +6,6 @@ import {
   CategoriesScreen,
   RecipeScreen,
   RecipesListScreen,
-  IngredientScreen,
-  SearchScreen,
   IngredientsDetailsScreen,
   AccountEditScreen,
 } from "../screens";
@@ -39,14 +37,6 @@ export const AppStack = () => {
       />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
       <Stack.Screen name="RecipesList" component={RecipesListScreen} />
-      <Stack.Screen name="Ingredient" component={IngredientScreen} />
-      <Stack.Screen
-        name="Search"
-        component={SearchScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
       <Stack.Screen
         name="IngredientsDetails"
         component={IngredientsDetailsScreen}

@@ -25,6 +25,7 @@ export default function IngredientsDetailsScreen(props) {
               padding: "3%",
               marginTop: "2%",
               borderRadius: 5,
+              elevation: 5,
             }}
             key={data}
           >

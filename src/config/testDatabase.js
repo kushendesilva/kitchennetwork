@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../config";
+import { db } from ".";
 import {
   collection,
   getDocs,
@@ -12,7 +12,7 @@ import { View } from "../components";
 import { ScrollView } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 
-function API() {
+function Test() {
   const [newName, setNewName] = useState("");
   const [newAge, setNewAge] = useState(0);
 
@@ -85,4 +85,4 @@ function API() {
   );
 }
 
-export default API;
+export default Test;

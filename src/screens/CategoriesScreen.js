@@ -1,12 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, Image, StyleSheet } from "react-native";
-import { Card, Text, Caption } from "react-native-paper";
-import { View } from "../components";
-import { Appbar } from "react-native-paper";
 import { ListByName } from "../config/database";
+import {
+  Searchbar,
+  Card,
+  Title,
+  Text,
+  Paragraph,
+  Caption,
+  Appbar,
+} from "react-native-paper";
+import { Colors, db } from "../config";
+import { collection, getDocs } from "firebase/firestore/lite";
+import { View } from "../components";
 
 export default function CategoriesScreen(props) {
   const { navigation } = props;
+
+  const [search, setSearch] = useState("");
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
+
+  useEffect(() => {
+    const getList = async () => {
+      const data = await getDocs(collection(db, "categories"));
+      setFilteredDataSource(
+        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+      setMasterDataSource(
+        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    };
+    getList();
+  }, []);
+
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = masterDataSource.filter(function (item) {
+        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
 
   const onPressCategory = (item) => {
     const title = item.name;
@@ -38,7 +79,22 @@ export default function CategoriesScreen(props) {
         <Appbar.Content title="Categories" />
       </Appbar>
       <FlatList
-        data={ListByName("categories")}
+        ListHeaderComponent={
+          <Searchbar
+            style={{
+              marginTop: "2%",
+              marginBottom: "2%",
+              borderRadius: 10,
+              marginLeft: "2%",
+              marginRight: "2%",
+            }}
+            onChangeText={(text) => searchFilterFunction(text)}
+            onClear={() => searchFilterFunction("")}
+            value={search}
+            placeholder="Search"
+          />
+        }
+        data={filteredDataSource}
         renderItem={renderCategory}
         keyExtractor={(item) => `${item.id}`}
         ListFooterComponent={<Caption>You Reached the End</Caption>}
@@ -51,25 +107,27 @@ export default function CategoriesScreen(props) {
 const styles = StyleSheet.create({
   categoriesItemContainer: {
     flex: 1,
-    margin: "3%",
+    marginHorizontal: "5%",
+    marginVertical: "2%",
     justifyContent: "center",
     alignItems: "center",
     borderColor: "grey",
     borderWidth: 0.5,
     borderRadius: 5,
     overflow: "hidden",
+    backgroundColor: Colors.primary,
+    elevation: 5,
   },
   categoriesPhoto: {
     width: "100%",
     height: 155,
   },
   categoriesName: {
-    flex: 1,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    color: "black",
-    margin: 8,
+    color: Colors.white,
+    margin: "3%",
   },
   categoriesInfo: {
     marginBottom: 8,

@@ -1,10 +1,8 @@
 import React from "react";
 import { ScrollView, Text, Image, Dimensions, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
-import { getCategoryName, getCategoryById } from "../data/MockDataAPI";
 import { Icon, View } from "../components";
 import { Colors } from "../config";
-import { ListWithNest, ListWithWhere } from "../config/database";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
@@ -12,8 +10,6 @@ export default function RecipeScreen(props) {
   const { navigation, route } = props;
 
   const item = route.params?.item;
-  const category = getCategoryById(item.categoryId);
-  const title = getCategoryName(category.id);
 
   return (
     <ScrollView style={styles.container}>
@@ -31,7 +27,7 @@ export default function RecipeScreen(props) {
           style={{ borderRadius: 10, margin: "1%" }}
           mode="text"
         >
-          {getCategoryName(item.categoryId)}
+          {item.category}
         </Button>
 
         <View style={styles.infoContainer}>
