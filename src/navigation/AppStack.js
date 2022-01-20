@@ -6,7 +6,6 @@ import {
   CategoriesScreen,
   RecipeScreen,
   RecipesListScreen,
-  IngredientsDetailsScreen,
   AccountEditScreen,
 } from "../screens";
 import { Colors } from "../config";
@@ -37,13 +36,7 @@ export const AppStack = () => {
       />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
       <Stack.Screen name="RecipesList" component={RecipesListScreen} />
-      <Stack.Screen
-        name="IngredientsDetails"
-        component={IngredientsDetailsScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+
       <Stack.Screen
         name="Account"
         component={AccountScreen}

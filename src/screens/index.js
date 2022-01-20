@@ -6,8 +6,8 @@ import HomeScreen from "./HomeScreen";
 import CategoriesScreen from "./CategoriesScreen";
 import RecipeScreen from "./RecipeScreen";
 import RecipesListScreen from "./RecipesListScreen";
-import IngredientsDetailsScreen from "./IngredientsDetailsScreen";
 import AccountEditScreen from "./AccountEditScreen";
+import NewRecipe from "./NewRecipe";
 
 export {
   LoginScreen,
@@ -18,6 +18,6 @@ export {
   CategoriesScreen,
   RecipeScreen,
   RecipesListScreen,
-  IngredientsDetailsScreen,
   AccountEditScreen,
+  NewRecipe,
 };

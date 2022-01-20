@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, Image, StyleSheet } from "react-native";
-import { ListByName } from "../config/database";
-import {
-  Searchbar,
-  Card,
-  Title,
-  Text,
-  Paragraph,
-  Caption,
-  Appbar,
-} from "react-native-paper";
+import { Searchbar, Card, Text, Caption, Appbar } from "react-native-paper";
 import { Colors, db } from "../config";
 import { collection, getDocs } from "firebase/firestore/lite";
 import { View } from "../components";
