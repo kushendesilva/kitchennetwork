@@ -1,15 +1,12 @@
 import React, { useLayoutEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { Card, Title, Paragraph } from "react-native-paper";
-import { getRecipes, getCategoryName } from "../data/MockDataAPI";
 import { RecipeCard } from "../config/AppStyles";
 import { View } from "../components";
+import { ListWithWhere } from "../config/database";
 
 export default function RecipesListScreen(props) {
   const { navigation, route } = props;
-
-  const item = route?.params?.category;
-  const recipesArray = getRecipes(item.id);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -27,9 +24,7 @@ export default function RecipesListScreen(props) {
       <Card.Cover style={styles.photo} source={{ uri: item.photo_url }} />
       <Card.Content>
         <Title style={styles.title}>{item.title}</Title>
-        <Paragraph style={styles.category}>
-          {getCategoryName(item.categoryId)}
-        </Paragraph>
+        <Paragraph style={styles.category}>{item.category}</Paragraph>
       </Card.Content>
     </Card>
   );
@@ -40,7 +35,7 @@ export default function RecipesListScreen(props) {
         vertical
         showsVerticalScrollIndicator={false}
         numColumns={2}
-        data={recipesArray}
+        data={ListWithWhere("recipes", "categoryId", route.params?.category)}
         renderItem={renderRecipes}
         keyExtractor={(item) => `${item.recipeId}`}
       />

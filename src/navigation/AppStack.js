@@ -50,6 +50,9 @@ export const AppStack = () => {
       <Stack.Screen
         name="IngredientsDetails"
         component={IngredientsDetailsScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="Account"

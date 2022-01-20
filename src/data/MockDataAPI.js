@@ -50,7 +50,6 @@ export function getRecipes(categoryId) {
   return recipesArray;
 }
 
-// modifica
 export function getRecipesByIngredient(ingredientId) {
   const recipesArray = [];
   recipes.map((data) => {
@@ -90,7 +89,7 @@ export function getRecipesByCategoryName(categoryName) {
   const recipesArray = [];
   categories.map((data) => {
     if (data.name.toUpperCase().includes(nameUpper)) {
-      const recipes = getRecipes(data.id); // return a vector of recipes
+      const recipes = getRecipes(data.id);
       recipes.map((item) => {
         recipesArray.push(item);
       });

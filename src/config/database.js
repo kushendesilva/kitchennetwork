@@ -1,22 +1,28 @@
-export const cityList = [
-  {
-    id: 1,
-    city: "Mount Lavinia",
-    district: "Colombo",
-  },
-  {
-    id: 2,
-    city: "Hikkaduwa",
-    district: "Galle",
-  },
-  {
-    id: 3,
-    city: "Beruwala",
-    district: "Kalutara",
-  },
-];
+import { useState, useEffect } from "react";
+import { db } from "../config";
+import { collection, getDocs, where, query } from "firebase/firestore/lite";
 
-export const userData = {
-  email: "admin@surfseeker.com",
-  name: "Admin",
+export const ListByName = (listRef) => {
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    const getList = async (listRef) => {
+      const data = await getDocs(collection(db, listRef));
+      setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getList(listRef);
+  }, []);
+  return list;
+};
+
+export const ListWithWhere = (listRef, label, detail) => {
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    const getList = async (listRef, label, detail) => {
+      const q = query(collection(db, listRef), where(label, "==", detail));
+      const querySnapshot = await getDocs(q);
+      setList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getList(listRef, label, detail);
+  }, []);
+  return list;
 };

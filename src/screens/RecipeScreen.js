@@ -1,17 +1,10 @@
-import React, { useRef } from "react";
-import {
-  ScrollView,
-  Text,
-  Image,
-  Dimensions,
-  TouchableHighlight,
-  StyleSheet,
-} from "react-native";
-import Carousel from "react-native-snap-carousel";
+import React from "react";
+import { ScrollView, Text, Image, Dimensions, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { getCategoryName, getCategoryById } from "../data/MockDataAPI";
 import { Icon, View } from "../components";
 import { Colors } from "../config";
+import { ListWithNest, ListWithWhere } from "../config/database";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
@@ -22,44 +15,21 @@ export default function RecipeScreen(props) {
   const category = getCategoryById(item.categoryId);
   const title = getCategoryName(category.id);
 
-  const slider1Ref = useRef();
-
-  const renderImage = ({ item }) => (
-    <TouchableHighlight>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri: item }} />
-      </View>
-    </TouchableHighlight>
-  );
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.carouselContainer}>
         <View style={styles.carousel}>
-          <Carousel
-            ref={slider1Ref}
-            data={item.photosArray}
-            renderItem={renderImage}
-            sliderWidth={viewportWidth}
-            itemWidth={viewportWidth}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={1}
-            firstItem={0}
-            loop={false}
-            autoplay={false}
-            autoplayDelay={500}
-            autoplayInterval={3000}
-          />
+          <View style={styles.imageContainer}>
+            <Image style={styles.image} source={{ uri: item.photo_url }} />
+          </View>
         </View>
       </View>
       <View style={styles.infoRecipeContainer}>
         <Text style={styles.infoRecipeName}>{item.title}</Text>
         <Button
+          uppercase={false}
           style={{ borderRadius: 10, margin: "1%" }}
           mode="text"
-          onPress={() =>
-            navigation.navigate("RecipesList", { category, title })
-          }
         >
           {getCategoryName(item.categoryId)}
         </Button>
@@ -78,9 +48,12 @@ export default function RecipeScreen(props) {
           }}
           mode="outlined"
           onPress={() => {
-            let ingredients = item.ingredients;
-            let title = "Ingredients for " + item.title;
-            navigation.navigate("IngredientsDetails", { ingredients, title });
+            let title = item.title;
+            let ingredientList = item.ingredients;
+            navigation.navigate("IngredientsDetails", {
+              ingredientList,
+              title,
+            });
           }}
         >
           View Ingredients
@@ -101,7 +74,6 @@ const styles = StyleSheet.create({
   carouselContainer: {
     minHeight: 250,
   },
-  carousel: {},
 
   image: {
     ...StyleSheet.absoluteFillObject,

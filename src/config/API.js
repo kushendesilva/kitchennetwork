@@ -16,13 +16,10 @@ function API() {
   const [newName, setNewName] = useState("");
   const [newAge, setNewAge] = useState(0);
 
-  const [users, setUsers] = useState([]);
-  const usersCollectionRef = collection(db, "categories");
-
   const createUser = async () => {
     const testCollectionRef = doc(db, "test", newName);
     await setDoc(testCollectionRef, {
-      name: String(newName),
+      name: doc(db, "test", newName),
       id: Number(newAge),
     });
   };
@@ -38,6 +35,8 @@ function API() {
     await deleteDoc(userDoc);
   };
 
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db, "categories");
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectionRef);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Appbar, Button, FAB, Avatar, Text } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { getDoc, doc } from "firebase/firestore/lite";
@@ -19,7 +19,7 @@ export const AccountScreen = (props) => {
     signOut(auth).catch((error) => console.log("Error logging out: ", error));
   };
 
-  const [user, setUser] = React.useState([]);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     const getNote = async () => {

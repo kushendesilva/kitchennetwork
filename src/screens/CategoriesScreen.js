@@ -2,16 +2,15 @@ import React from "react";
 import { FlatList, Image, StyleSheet } from "react-native";
 import { Card, Text, Caption } from "react-native-paper";
 import { View } from "../components";
-import { categories } from "../data/dataArrays";
-import { getNumberOfRecipes } from "../data/MockDataAPI";
 import { Appbar } from "react-native-paper";
+import { ListByName } from "../config/database";
 
 export default function CategoriesScreen(props) {
   const { navigation } = props;
 
   const onPressCategory = (item) => {
     const title = item.name;
-    const category = item;
+    const category = item.id;
     navigation.navigate("RecipesList", { category, title });
   };
 
@@ -23,9 +22,6 @@ export default function CategoriesScreen(props) {
           source={{ uri: item.photo_url }}
         />
         <Text style={styles.categoriesName}>{item.name}</Text>
-        <Text style={styles.categoriesInfo}>
-          {getNumberOfRecipes(item.id)} recipes
-        </Text>
       </View>
     </Card>
   );
@@ -42,7 +38,7 @@ export default function CategoriesScreen(props) {
         <Appbar.Content title="Categories" />
       </Appbar>
       <FlatList
-        data={categories}
+        data={ListByName("categories")}
         renderItem={renderCategory}
         keyExtractor={(item) => `${item.id}`}
         ListFooterComponent={<Caption>You Reached the End</Caption>}
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "black",
-    marginTop: 8,
+    margin: 8,
   },
   categoriesInfo: {
     marginBottom: 8,
