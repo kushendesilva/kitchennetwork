@@ -1,15 +1,7 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Share, TouchableNativeFeedback } from "react-native";
 import { DrawerItem, DrawerContentScrollView } from "@react-navigation/drawer";
-import {
-  Drawer,
-  Divider,
-  Caption,
-  Avatar,
-  Text,
-  Button,
-  Title,
-} from "react-native-paper";
+import { Drawer, Divider, Caption, Avatar, Title } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import { signOut } from "firebase/auth";
@@ -65,7 +57,7 @@ export default function DrawerContainer(props) {
           >
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row", marginTop: 15 }}>
-                <Avatar.Icon size={50} icon="account-outline" />
+                <Avatar.Icon size={50} icon="account" />
                 {AppRenderIf(
                   user != "Empty",
                   <View style={{ marginLeft: 15, flexDirection: "column" }}>
@@ -93,14 +85,14 @@ export default function DrawerContainer(props) {
             <DrawerItem
               labelStyle={{ color: Colors.black }}
               style={{ color: Colors.primary }}
-              label="Home"
+              label="Recipes"
               onPress={() => {
                 navigation.navigate("Home");
                 navigation.closeDrawer();
               }}
-              icon={({ color, size }) => (
+              icon={({ size }) => (
                 <MaterialCommunityIcons
-                  name="home-outline"
+                  name="chef-hat"
                   color={Colors.primary}
                   size={size}
                 />
@@ -113,14 +105,32 @@ export default function DrawerContainer(props) {
                 navigation.navigate("Categories");
                 navigation.closeDrawer();
               }}
-              icon={({ color, size }) => (
+              icon={({ size }) => (
                 <MaterialCommunityIcons
-                  name="layers-outline"
+                  name="layers"
                   color={Colors.primary}
                   size={size}
                 />
               )}
             />
+            {AppRenderIf(
+              userEmail.toLowerCase() == "admin@kn.com",
+              <DrawerItem
+                labelStyle={{ color: Colors.black }}
+                label="Ingredients"
+                onPress={() => {
+                  navigation.navigate("Ingredients");
+                  navigation.closeDrawer();
+                }}
+                icon={({ size }) => (
+                  <MaterialCommunityIcons
+                    name="food-apple"
+                    color={Colors.primary}
+                    size={size}
+                  />
+                )}
+              />
+            )}
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
@@ -129,7 +139,7 @@ export default function DrawerContainer(props) {
           labelStyle={{ color: Colors.black }}
           label="Share"
           onPress={shareMessage}
-          icon={({ color, size }) => (
+          icon={({ size }) => (
             <MaterialCommunityIcons
               name="share-variant"
               color={Colors.primary}
@@ -141,7 +151,7 @@ export default function DrawerContainer(props) {
           labelStyle={{ color: Colors.black }}
           label="Logout"
           onPress={handleLogout}
-          icon={({ color, size }) => (
+          icon={({ size }) => (
             <MaterialCommunityIcons
               name="logout"
               color={Colors.primary}

@@ -1,28 +1,64 @@
-import React, { useState, useEffect } from "react";
-import { db } from ".";
-import {
-  collection,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  setDoc,
-  doc,
-} from "firebase/firestore/lite";
-import { View } from "../components";
-import { ScrollView } from "react-native";
-import { Button, TextInput, Text } from "react-native-paper";
+import React, { useState } from "react";
+import { db } from "../config";
+import { setDoc, doc } from "firebase/firestore/lite";
+import { View, TextInput, Button } from "../components";
 
-function NewRecipe(props) {
-  const [name, setName] = useState("");
+export default function NewRecipe(props) {
+  const { route, navigation } = props;
+
+  const category = route.params?.category;
+  const categoryId = route.params?.categoryId;
+  const userId = route.params?.userId;
+  const recipeId = Date.now().toString();
+
+  const [title, setTitle] = useState("");
+  const [photo_url, setPhoto_url] = useState("");
+  const [time, setTime] = useState("");
+  const [description, setDescription] = useState("");
 
   const createUser = async () => {
-    const testCollectionRef = doc(db, "test", name);
+    const testCollectionRef = doc(db, "recipes", recipeId);
     await setDoc(testCollectionRef, {
-      name: doc(db, "test", name),
-      id: String(name),
+      category,
+      categoryId,
+      userId,
+      recipeId,
+      title,
+      time,
+      description,
+      photo_url,
     });
+    navigation.navigate("SelectIngredients", { recipeId });
   };
-  return <View isSafe></View>;
-}
 
-export default NewRecipe;
+  return (
+    <View isSafe>
+      <TextInput
+        left="chef-hat"
+        placeholder="Recipe Name"
+        autoCapitalize="words"
+        onChangeText={(text) => setTitle(text)}
+      />
+      <TextInput
+        left="timer"
+        placeholder="Estimated Time"
+        onChangeText={(text) => setTime(text)}
+        keyboardType="number-pad"
+      />
+      <TextInput
+        multiline={true}
+        numberOfLines={15}
+        label="Instructions"
+        autoCapitalize="sentences"
+        onChangeText={(text) => setDescription(text)}
+      />
+      <TextInput
+        left="camera-image"
+        label="Image Url"
+        autoCapitalize="none"
+        onChangeText={(text) => setPhoto_url(text)}
+      />
+      <Button onPress={createUser} title="Create" />
+    </View>
+  );
+}

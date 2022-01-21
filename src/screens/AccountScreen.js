@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Appbar, Button, FAB, Avatar, Text } from "react-native-paper";
-import { StyleSheet } from "react-native";
-import { getDoc, doc } from "firebase/firestore/lite";
+import {
+  Appbar,
+  Button,
+  Avatar,
+  Text,
+  Card,
+  Title,
+  Paragraph,
+  IconButton,
+} from "react-native-paper";
+import { FlatList, StyleSheet, View } from "react-native";
+import { getDoc, doc, deleteDoc } from "firebase/firestore/lite";
 import AppRenderIf from "../config/AppRenderIf";
 import { signOut } from "firebase/auth";
 import { auth, Colors, db } from "../config";
-import { View } from "../components";
+import { View as SafeView } from "../components";
+import { ListWithWhere } from "../config/database";
+import { RecipeCard } from "../config/AppStyles";
 
 export const AccountScreen = (props) => {
   const { navigation } = props;
@@ -13,6 +24,7 @@ export const AccountScreen = (props) => {
   const userEmail =
     auth.currentUser.email.charAt(0).toUpperCase() +
     auth.currentUser.email.slice(1);
+
   const userID = auth.currentUser.uid;
 
   const handleLogout = () => {
@@ -37,7 +49,7 @@ export const AccountScreen = (props) => {
   }, []);
 
   return (
-    <View isSafe>
+    <SafeView isSafe>
       <Appbar>
         <Appbar.Action
           icon="menu"
@@ -46,91 +58,170 @@ export const AccountScreen = (props) => {
           }}
         />
         <Appbar.Content title="Account" />
-      </Appbar>
-      <View style={styles.accountTop}>
-        <FAB
-          style={styles.fab}
-          small
-          icon="pencil"
+        <Appbar.Action
+          color={Colors.primary}
+          style={{ backgroundColor: Colors.white }}
+          icon="pen"
           onPress={() =>
             navigation.navigate("AccountEdit", {
               user: {
                 name: user.name,
-                email: userEmail,
+                email: userEmail.toLowerCase(),
                 id: userID,
               },
             })
           }
         />
-        <Avatar.Icon
-          size={80}
-          icon="account"
-          color={Colors.primary}
-          style={{ backgroundColor: Colors.white }}
-        />
-        {AppRenderIf(
-          user != "Empty",
-          <Text
-            style={{
-              color: Colors.white,
-              marginTop: "2%",
-              fontSize: 18,
-              fontWeight: "bold",
+      </Appbar>
+      <FlatList
+        numColumns={2}
+        ListHeaderComponent={
+          <>
+            <View
+              style={{
+                backgroundColor: Colors.primary,
+                margin: 10,
+                paddingVertical: 40,
+                borderRadius: 10,
+                elevation: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar.Icon
+                    size={60}
+                    icon="account"
+                    color={Colors.primary}
+                    style={{ backgroundColor: Colors.white }}
+                  />
+                  <View style={{ marginLeft: 10 }}>
+                    {AppRenderIf(
+                      user != "Empty",
+                      <Text
+                        style={{
+                          color: Colors.white,
+                          marginTop: "2%",
+                          fontSize: 18,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {user.name}
+                      </Text>
+                    )}
+                    {AppRenderIf(
+                      user == "Empty",
+                      <Button
+                        style={{
+                          padding: "1%",
+                          margin: "2%",
+                          marginTop: "4%",
+                          borderColor: Colors.white,
+                        }}
+                        color={Colors.white}
+                        mode="outlined"
+                        onPress={() =>
+                          navigation.navigate("AccountEdit", {
+                            user: {
+                              name: "",
+                              email: userEmail,
+                              id: userID,
+                            },
+                          })
+                        }
+                      >
+                        Add Name
+                      </Button>
+                    )}
+
+                    <Text
+                      style={{
+                        color: Colors.white,
+                        margin: "2%",
+                        fontSize: 12,
+                      }}
+                    >
+                      {userEmail}
+                    </Text>
+                  </View>
+                </View>
+                <Button
+                  style={{ padding: "1%", margin: "2%" }}
+                  color={Colors.white}
+                  mode="contained"
+                  onPress={handleLogout}
+                  icon="logout"
+                >
+                  Logout
+                </Button>
+              </View>
+            </View>
+            <Title
+              style={{
+                fontWeight: "bold",
+                color: Colors.primary,
+                fontSize: 20,
+                textAlign: "center",
+                marginBottom: 5,
+              }}
+            >
+              My Recipes
+            </Title>
+          </>
+        }
+        data={ListWithWhere("recipes", "userId", userID)}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={({ item }) => (
+          <Card
+            style={styles.container}
+            onPress={() => {
+              navigation.navigate("Recipe", { item });
             }}
           >
-            {user.name}
-          </Text>
+            <IconButton
+              icon="delete"
+              color={Colors.primary}
+              size={20}
+              style={{
+                backgroundColor: Colors.white,
+                position: "absolute",
+                right: 0,
+                bottom: 0,
+              }}
+              onPress={async () => {
+                const userDoc = doc(db, "recipes", item.recipeId);
+                await deleteDoc(userDoc);
+                navigation.goBack();
+              }}
+            />
+            <Card.Cover style={styles.photo} source={{ uri: item.photo_url }} />
+            <Card.Content>
+              <Title style={styles.title}>{item.title}</Title>
+              <Paragraph style={styles.category}>{item.category}</Paragraph>
+            </Card.Content>
+          </Card>
         )}
-        {AppRenderIf(
-          user == "Empty",
-          <Button
-            style={{
-              padding: "1%",
-              margin: "2%",
-              marginTop: "4%",
-              borderColor: Colors.white,
-            }}
-            color={Colors.white}
-            mode="outlined"
-            onPress={() =>
-              navigation.navigate("AccountEdit", {
-                user: {
-                  name: "",
-                  email: userEmail,
-                  id: userID,
-                },
-              })
-            }
-          >
-            Add Name
-          </Button>
-        )}
-
-        <Text
-          style={{
-            color: Colors.white,
-            margin: "2%",
-            fontSize: 12,
-          }}
-        >
-          {userEmail}
-        </Text>
-
-        <Button
-          style={{ padding: "1%", margin: "2%" }}
-          color={Colors.white}
-          mode="contained"
-          onPress={handleLogout}
-          icon="logout"
-        >
-          Logout
-        </Button>
-      </View>
-    </View>
+      />
+    </SafeView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: RecipeCard.container,
+  photo: RecipeCard.photo,
+  title: RecipeCard.title,
+  category: RecipeCard.category,
   accountTop: {
     backgroundColor: Colors.primary,
     borderRadius: 10,

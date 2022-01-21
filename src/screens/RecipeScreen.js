@@ -15,7 +15,7 @@ export default function RecipeScreen(props) {
   const item = route.params?.item;
 
   return (
-    <View style={styles.container}>
+    <View isSafe style={styles.container}>
       <FlatList
         ListHeaderComponent={
           <>
@@ -159,15 +159,10 @@ const RECIPE_ITEM_HEIGHT = 150;
 const RECIPE_ITEM_MARGIN = 20;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    flex: 1,
-  },
   image: {
     width: viewportWidth - 20,
     height: 230,
     borderRadius: 10,
-    elevation: 10,
   },
   imageContainer: {
     flex: 1,

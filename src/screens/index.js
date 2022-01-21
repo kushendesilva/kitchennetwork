@@ -8,6 +8,11 @@ import RecipeScreen from "./RecipeScreen";
 import RecipesListScreen from "./RecipesListScreen";
 import AccountEditScreen from "./AccountEditScreen";
 import NewRecipe from "./NewRecipe";
+import SelectCategory from "./SelectCategory";
+import IngredientsScreen from "./IngredientsScreen";
+import NewIngredient from "./NewIngredient";
+import SelectIngredients from "./SelectIngredients";
+import NewCategory from "./NewCategory";
 
 export {
   LoginScreen,
@@ -20,4 +25,9 @@ export {
   RecipesListScreen,
   AccountEditScreen,
   NewRecipe,
+  SelectCategory,
+  IngredientsScreen,
+  NewIngredient,
+  SelectIngredients,
+  NewCategory,
 };

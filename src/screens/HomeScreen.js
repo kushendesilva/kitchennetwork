@@ -7,14 +7,18 @@ import {
   Paragraph,
   Caption,
   Appbar,
+  IconButton,
 } from "react-native-paper";
-import { db } from "../config";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { Colors, db, auth } from "../config";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore/lite";
+import AppRenderIf from "../config/AppRenderIf";
 import { RecipeCard } from "../config/AppStyles";
 import { View } from "../components";
 
 export default function HomeScreen(props) {
   const { navigation } = props;
+
+  const checkAdmin = auth.currentUser.email;
 
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -56,6 +60,27 @@ export default function HomeScreen(props) {
 
   const renderRecipes = ({ item }) => (
     <Card style={styles.container} onPress={() => onPressRecipe(item)}>
+      {AppRenderIf(
+        checkAdmin == "admin@kn.com",
+        <>
+          <IconButton
+            icon="delete"
+            color={Colors.primary}
+            size={20}
+            style={{
+              backgroundColor: Colors.white,
+              position: "absolute",
+              right: 0,
+              bottom: 0,
+            }}
+            onPress={async () => {
+              const userDoc = doc(db, "recipes", item.recipeId);
+              await deleteDoc(userDoc);
+              navigation.goBack();
+            }}
+          />
+        </>
+      )}
       <Card.Cover style={styles.photo} source={{ uri: item.photo_url }} />
       <Card.Content>
         <Title style={styles.title}>{item.title}</Title>
@@ -73,7 +98,15 @@ export default function HomeScreen(props) {
             navigation.openDrawer();
           }}
         />
-        <Appbar.Content title="Home" />
+        <Appbar.Content title="Recipes" />
+        <Appbar.Action
+          color={Colors.primary}
+          style={{ backgroundColor: Colors.white }}
+          icon="plus"
+          onPress={() => {
+            navigation.navigate("SelectCategory");
+          }}
+        />
       </Appbar>
 
       <FlatList

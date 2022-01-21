@@ -7,6 +7,12 @@ import {
   RecipeScreen,
   RecipesListScreen,
   AccountEditScreen,
+  NewRecipe,
+  SelectCategory,
+  IngredientsScreen,
+  NewIngredient,
+  SelectIngredients,
+  NewCategory,
 } from "../screens";
 import { Colors } from "../config";
 
@@ -34,7 +40,31 @@ export const AppStack = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="Ingredients"
+        component={IngredientsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
+      <Stack.Screen name="NewRecipe" component={NewRecipe} />
+      <Stack.Screen name="NewCategory" component={NewCategory} />
+      <Stack.Screen name="NewIngredient" component={NewIngredient} />
+      <Stack.Screen
+        name="SelectIngredients"
+        component={SelectIngredients}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SelectCategory"
+        component={SelectCategory}
+        options={{
+          title: "Select Category",
+        }}
+      />
       <Stack.Screen name="RecipesList" component={RecipesListScreen} />
 
       <Stack.Screen

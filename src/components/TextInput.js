@@ -8,10 +8,20 @@ export const TextInput = ({
   left,
   right,
   handlePasswordVisibility,
+  numberOfLines = 1,
+  multiline = false,
+  label,
+  keyboardType = "default",
+  autoCapitalize = "none",
   ...otherProps
 }) => {
   return (
     <PaperTextInput
+      autoCapitalize={autoCapitalize}
+      keyboardType={keyboardType}
+      label={label}
+      multiline={multiline}
+      numberOfLines={numberOfLines}
       mode="outlined"
       style={{ margin: "2%" }}
       left={

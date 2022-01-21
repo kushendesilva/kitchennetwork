@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Image, StyleSheet, View } from "react-native";
-import {
-  Searchbar,
-  Card,
-  Text,
-  Caption,
-  Appbar,
-  IconButton,
-} from "react-native-paper";
+import { FlatList, Image, StyleSheet } from "react-native";
+import { Searchbar, Card, Text, Caption } from "react-native-paper";
 import { Colors, db, auth } from "../config";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore/lite";
-import { View as SafeView } from "../components";
-import AppRenderIf from "../config/AppRenderIf";
+import { collection, getDocs } from "firebase/firestore/lite";
+import { View } from "../components";
 
-export default function CategoriesScreen(props) {
+export default function SelectCategory(props) {
   const { navigation } = props;
 
-  const checkAdmin = auth.currentUser.email;
+  const userId = auth.currentUser.uid;
 
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -51,74 +43,25 @@ export default function CategoriesScreen(props) {
   };
 
   const onPressCategory = (item) => {
-    const title = item.name;
-    const category = item.id;
-    navigation.navigate("RecipesList", { category, title });
+    const category = item.name;
+    const categoryId = item.id;
+    navigation.navigate("NewRecipe", { category, categoryId, userId });
   };
 
   const renderCategory = ({ item }) => (
     <Card style={{ elevation: 0 }} onPress={() => onPressCategory(item)}>
       <View style={styles.categoriesItemContainer}>
-        {AppRenderIf(
-          checkAdmin == "admin@kn.com",
-          <>
-            <IconButton
-              icon="delete"
-              color={Colors.primary}
-              size={20}
-              style={{
-                backgroundColor: Colors.white,
-                position: "absolute",
-                right: 0,
-                bottom: 0,
-              }}
-              onPress={async () => {
-                const userDoc = doc(db, "categories", item.id);
-                await deleteDoc(userDoc);
-                navigation.goBack();
-              }}
-            />
-          </>
-        )}
         <Image
           style={styles.categoriesPhoto}
           source={{ uri: item.photo_url }}
         />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={styles.categoriesName}>{item.name}</Text>
-        </View>
+        <Text style={styles.categoriesName}>{item.name}</Text>
       </View>
     </Card>
   );
 
   return (
-    <SafeView isSafe>
-      <Appbar>
-        <Appbar.Action
-          icon="menu"
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-        />
-        <Appbar.Content title="Categories" />
-        {AppRenderIf(
-          checkAdmin == "admin@kn.com",
-          <Appbar.Action
-            color={Colors.primary}
-            style={{ backgroundColor: Colors.white }}
-            icon="plus"
-            onPress={() => {
-              navigation.navigate("NewCategory");
-            }}
-          />
-        )}
-      </Appbar>
+    <View isSafe>
       <FlatList
         ListHeaderComponent={
           <Searchbar
@@ -141,7 +84,7 @@ export default function CategoriesScreen(props) {
         ListFooterComponent={<Caption>You Reached the End</Caption>}
         ListFooterComponentStyle={{ alignItems: "center", margin: "2%" }}
       />
-    </SafeView>
+    </View>
   );
 }
 

@@ -47,6 +47,7 @@ function AccountEditScreen(props) {
           value={user.email}
         />
         <TextInput
+          autoCapitalize="words"
           label="Name"
           left="account-outline"
           placeholder="Enter your name"
