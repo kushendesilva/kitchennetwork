@@ -20,7 +20,20 @@ export default function RecipeScreen(props) {
         ListHeaderComponent={
           <>
             <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{ uri: item.photo_url }} />
+              {AppRenderIf(
+                item.photo_url == "",
+                <Image
+                  style={styles.image}
+                  source={{
+                    uri: "https://firebasestorage.googleapis.com/v0/b/kitchennetwork-cw.appspot.com/o/default.jpg?alt=media&token=ddf4dc61-3261-4221-ab42-01f939a54059",
+                  }}
+                />
+              )}
+
+              {AppRenderIf(
+                item.photo_url != "",
+                <Image style={styles.image} source={{ uri: item.photo_url }} />
+              )}
             </View>
             <View style={styles.infoRecipeContainer}>
               <Text style={styles.infoRecipeName}>{item.title} </Text>

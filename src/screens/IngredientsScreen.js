@@ -54,14 +54,13 @@ export default function IngredientsScreen(props) {
                     onPress={async () => {
                       const userDoc = doc(db, "recipes", item.recipeId);
                       await deleteDoc(userDoc);
-                      navigation.goBack();
                     }}
                   />
                 </>
               )}
               <Title style={styles.title}>{item.name}</Title>
               <Paragraph style={styles.category}>
-                {item.unit} | {item.unit1}
+                {item.unit} {"  "} {item.unit1}
               </Paragraph>
             </View>
           </>

@@ -75,15 +75,27 @@ export default function CategoriesScreen(props) {
               onPress={async () => {
                 const userDoc = doc(db, "categories", item.id);
                 await deleteDoc(userDoc);
-                navigation.goBack();
               }}
             />
           </>
         )}
-        <Image
-          style={styles.categoriesPhoto}
-          source={{ uri: item.photo_url }}
-        />
+        {AppRenderIf(
+          item.photo_url != "",
+          <Image
+            style={styles.categoriesPhoto}
+            source={{ uri: item.photo_url }}
+          />
+        )}
+        {AppRenderIf(
+          item.photo_url == "",
+          <Image
+            style={styles.categoriesPhoto}
+            source={{
+              uri: "https://firebasestorage.googleapis.com/v0/b/kitchennetwork-cw.appspot.com/o/default.jpg?alt=media&token=ddf4dc61-3261-4221-ab42-01f939a54059",
+            }}
+          />
+        )}
+
         <View
           style={{
             flexDirection: "row",

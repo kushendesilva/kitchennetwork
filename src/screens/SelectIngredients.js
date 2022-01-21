@@ -228,7 +228,7 @@ export default function SelectIngredients(props) {
                 </DataTable.Cell>
                 <DataTable.Cell style={{ justifyContent: "center" }}>
                   {AppRenderIf(
-                    item.unit1 != null,
+                    item.unit1 != null && item.unit1 != "",
                     <Button
                       color={Colors.green}
                       uppercase={false}
