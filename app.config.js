@@ -6,7 +6,7 @@ export default {
     slug: "kitchennetwork",
     owner: "kushenthimira",
     platforms: ["android"],
-    version: "2.1.0",
+    version: "3.0.0",
     orientation: "portrait",
     icon: "./assets/logo.png",
     splash: {
@@ -24,6 +24,11 @@ export default {
     },
     android: {
       package: "npc.cipher.kitchennetwork",
+      permissions: [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+      ],
       adaptiveIcon: {
         foregroundImage: "./assets/logo.png",
         backgroundColor: "#ffffff",

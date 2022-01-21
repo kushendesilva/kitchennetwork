@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { StyleSheet, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Image, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Card, Title, ActivityIndicator, Text } from "react-native-paper";
+import { Title, ActivityIndicator } from "react-native-paper";
 import { Colors, db, storage } from "../config";
 import { View, Button, TextInput } from "../components";
 import { doc, setDoc } from "firebase/firestore/lite";
@@ -10,6 +10,18 @@ import AppRenderIf from "../config/AppRenderIf";
 
 export default function NewCategory(props) {
   const { navigation } = props;
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permission to make this work");
+        }
+      }
+    })();
+  }, []);
 
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -178,7 +190,6 @@ export default function NewCategory(props) {
                   mode="contained"
                   onPress={() => {
                     setImage(null);
-                    blob.close();
                   }}
                   title="Change Picture"
                 />

@@ -7,16 +7,16 @@
 
 <h3 align="left">Resources</h3>
 
-- 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v2.1.0/kitchennetwork.apk" target="blank">**here**</a>
+- 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v3.0.0/kitchennetwork.apk" target="blank">**here**</a>
 
 |                                                                   |                                                                   |                                                                   |
 | :---------------------------------------------------------------: | :---------------------------------------------------------------: | :---------------------------------------------------------------: |
 | <img width="1604" alt="screenshot" src="/assets/previews/1.png">  | <img width="1604" alt="screenshot" src="/assets/previews/2.png">  | <img width="1604" alt="screenshot" src="/assets/previews/3.png">  |
-| <img width="1604" alt="screenshot" src="/assets/previews/4.png">  | <img width="1604" alt="screenshot" src="/assets/previews/5.png">  | <img width="1604" alt="screenshot" src="/assets/previews/17.png"> |
+| <img width="1604" alt="screenshot" src="/assets/previews/4.png">  | <img width="1604" alt="screenshot" src="/assets/previews/18.png"> | <img width="1604" alt="screenshot" src="/assets/previews/17.png"> |
 |                                                                   |
 | <img width="1604" alt="screenshot" src="/assets/previews/7.png">  | <img width="1604" alt="screenshot" src="/assets/previews/8.png">  | <img width="1604" alt="screenshot" src="/assets/previews/9.png">  |
-| <img width="1604" alt="screenshot" src="/assets/previews/10.png"> | <img width="1604" alt="screenshot" src="/assets/previews/13.png"> | <img width="1604" alt="screenshot" src="/assets/previews/12.png"> |
-| <img width="1604" alt="screenshot" src="/assets/previews/14.png"> | <img width="1604" alt="screenshot" src="/assets/previews/15.png"> | <img width="1604" alt="screenshot" src="/assets/previews/16.png"> |
+| <img width="1604" alt="screenshot" src="/assets/previews/10.png"> | <img width="1604" alt="screenshot" src="/assets/previews/20.png"> | <img width="1604" alt="screenshot" src="/assets/previews/12.png"> |
+| <img width="1604" alt="screenshot" src="/assets/previews/14.png"> | <img width="1604" alt="screenshot" src="/assets/previews/19.png"> | <img width="1604" alt="screenshot" src="/assets/previews/16.png"> |
 
 <h3 align="left">Socials</h3>
 <p align="left">
