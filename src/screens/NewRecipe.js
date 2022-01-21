@@ -12,7 +12,6 @@ export default function NewRecipe(props) {
   const recipeId = Date.now().toString();
 
   const [title, setTitle] = useState("");
-  const [photo_url, setPhoto_url] = useState("");
   const [time, setTime] = useState("");
   const [description, setDescription] = useState("");
 
@@ -26,9 +25,9 @@ export default function NewRecipe(props) {
       title,
       time,
       description,
-      photo_url,
+      photo_url: "",
     });
-    navigation.navigate("SelectIngredients", { recipeId });
+    navigation.navigate("SelectImage", { recipeId, title, category });
   };
 
   return (
@@ -51,12 +50,6 @@ export default function NewRecipe(props) {
         label="Instructions"
         autoCapitalize="sentences"
         onChangeText={(text) => setDescription(text)}
-      />
-      <TextInput
-        left="camera-image"
-        label="Image Url"
-        autoCapitalize="none"
-        onChangeText={(text) => setPhoto_url(text)}
       />
       <Button onPress={createUser} title="Create" />
     </View>

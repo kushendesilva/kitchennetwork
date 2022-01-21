@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Card, Title, ActivityIndicator, Text } from "react-native-paper";
+import { Card, Title, ActivityIndicator, Appbar } from "react-native-paper";
 import { Colors, db, storage } from "../config";
 import { View, Button, TextInput } from "../components";
-import { doc, setDoc } from "firebase/firestore/lite";
+import { doc, updateDoc, setDoc } from "firebase/firestore/lite";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import AppRenderIf from "../config/AppRenderIf";
+import { db } from "../config";
 
-export default function NewCategory(props) {
-  const { navigation } = props;
+export const SelectCategoryImage = (props) => {
+  const { navigation, route } = props;
+
+  const recipeId = route.params?.recipeId;
 
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
+
+  const { navigation } = props;
 
   const id = Date.now().toString();
 
@@ -26,6 +31,7 @@ export default function NewCategory(props) {
       name,
       photo_url: url,
     });
+    navigation.navigate("SelectImage", { recipeId, title, category });
   };
 
   const pickImage = async () => {
@@ -90,6 +96,15 @@ export default function NewCategory(props) {
 
   return (
     <View isSafe>
+      <Appbar>
+        <Appbar.Action
+          icon="arrow-left"
+          onPress={async () => {
+            navigation.goBack();
+          }}
+        />
+        <Appbar.Content title="New Category" />
+      </Appbar>
       <TextInput
         autoCapitalize="words"
         left="layers"
@@ -105,7 +120,7 @@ export default function NewCategory(props) {
             color: Colors.mediumGray,
           }}
         >
-          Image Preview
+          Category Preview
         </Title>
       )}
       {uploading == true && (
@@ -115,20 +130,43 @@ export default function NewCategory(props) {
           Image Uploading
         </Title>
       )}
+      <Card style={{ elevation: 0 }}>
+        <View style={styles.categoriesItemContainer}>
+          {AppRenderIf(
+            image != null,
+            <Image style={styles.categoriesPhoto} source={{ uri: image }} />
+          )}
+          {AppRenderIf(
+            image == null,
+            <Image
+              style={styles.categoriesPhoto}
+              source={{
+                uri: "https://firebasestorage.googleapis.com/v0/b/kitchennetwork-cw.appspot.com/o/default.png?alt=media&token=77cfe569-4e3c-45e8-89f2-ce75584ee611",
+              }}
+            />
+          )}
 
-      {AppRenderIf(
-        image != null,
-        <Image style={styles.categoriesPhoto} source={{ uri: image }} />
-      )}
-      {AppRenderIf(
-        image == null,
-        <Image
-          style={styles.categoriesPhoto}
-          source={{
-            uri: "https://firebasestorage.googleapis.com/v0/b/kitchennetwork-cw.appspot.com/o/default.png?alt=media&token=77cfe569-4e3c-45e8-89f2-ce75584ee611",
-          }}
-        />
-      )}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "center",
+                color: Colors.white,
+                margin: "3%",
+              }}
+            >
+              {name}
+            </Text>
+          </View>
+        </View>
+      </Card>
 
       <View>
         {uploading == true && (
@@ -178,7 +216,6 @@ export default function NewCategory(props) {
                   mode="contained"
                   onPress={() => {
                     setImage(null);
-                    blob.close();
                   }}
                   title="Change Picture"
                 />
@@ -202,7 +239,7 @@ export default function NewCategory(props) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   categoriesItemContainer: {
@@ -219,9 +256,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   categoriesPhoto: {
-    width: 350,
-    height: 175,
-    alignSelf: "center",
+    width: "100%",
+    height: 155,
   },
   categoriesName: {
     fontSize: 16,

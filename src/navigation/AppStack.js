@@ -13,6 +13,7 @@ import {
   NewIngredient,
   SelectIngredients,
   NewCategory,
+  SelectImage,
 } from "../screens";
 import { Colors } from "../config";
 
@@ -49,8 +50,27 @@ export const AppStack = () => {
       />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
       <Stack.Screen name="NewRecipe" component={NewRecipe} />
-      <Stack.Screen name="NewCategory" component={NewCategory} />
-      <Stack.Screen name="NewIngredient" component={NewIngredient} />
+      <Stack.Screen
+        name="SelectImage"
+        component={SelectImage}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="NewCategory"
+        component={NewCategory}
+        options={{
+          title: "New Category",
+        }}
+      />
+      <Stack.Screen
+        name="NewIngredient"
+        component={NewIngredient}
+        options={{
+          title: "New Ingredient",
+        }}
+      />
       <Stack.Screen
         name="SelectIngredients"
         component={SelectIngredients}

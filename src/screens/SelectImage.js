@@ -1,34 +1,33 @@
 import React, { useState } from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Card, Title, ActivityIndicator, Text } from "react-native-paper";
+import {
+  Card,
+  Title,
+  Paragraph,
+  ActivityIndicator,
+  Appbar,
+} from "react-native-paper";
 import { Colors, db, storage } from "../config";
-import { View, Button, TextInput } from "../components";
-import { doc, setDoc } from "firebase/firestore/lite";
+import { View, Button } from "../components";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore/lite";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { RecipeCard } from "../config/AppStyles";
 import AppRenderIf from "../config/AppRenderIf";
 
-export default function NewCategory(props) {
-  const { navigation } = props;
+export const SelectImage = (props) => {
+  const { navigation, route } = props;
+
+  const recipeId = route.params?.recipeId;
+  const title = route.params?.title;
+  const category = route.params?.category;
 
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
 
-  const id = Date.now().toString();
-
-  const [name, setName] = useState("");
-
-  const createDoc = async (url) => {
-    const testCollectionRef = doc(db, "categories", id);
-    await setDoc(testCollectionRef, {
-      id,
-      name,
-      photo_url: url,
-    });
-  };
-
   const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -57,7 +56,7 @@ export default function NewCategory(props) {
       xhr.send(null);
     });
     const imageId = Date.now().toString();
-    const storageRef = ref(storage, "categories/" + imageId);
+    const storageRef = ref(storage, "recipes/" + imageId);
     const uploadTask = uploadBytesResumable(storageRef, blob);
 
     uploadTask.on(
@@ -80,22 +79,33 @@ export default function NewCategory(props) {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setUploaded(true);
-          createDoc(downloadURL);
-          navigation.goBack();
+          updateRecipe(downloadURL);
+          navigation.navigate("SelectIngredients", { recipeId });
           blob.close();
         });
       }
     );
   };
 
+  const updateRecipe = async (imageUrl) => {
+    const recipeDoc = doc(db, "recipes", recipeId);
+    const newFields = { photo_url: imageUrl };
+    await updateDoc(recipeDoc, newFields);
+  };
+
   return (
     <View isSafe>
-      <TextInput
-        autoCapitalize="words"
-        left="layers"
-        label="Category Name"
-        onChangeText={(text) => setName(text)}
-      />
+      <Appbar>
+        <Appbar.Action
+          icon="arrow-left"
+          onPress={async () => {
+            const userDoc = doc(db, "recipes", recipeId);
+            await deleteDoc(userDoc);
+            navigation.goBack();
+          }}
+        />
+        <Appbar.Content title="Select Image" />
+      </Appbar>
       {uploading != true && (
         <Title
           style={{
@@ -105,7 +115,7 @@ export default function NewCategory(props) {
             color: Colors.mediumGray,
           }}
         >
-          Image Preview
+          Recipe Preview
         </Title>
       )}
       {uploading == true && (
@@ -115,21 +125,25 @@ export default function NewCategory(props) {
           Image Uploading
         </Title>
       )}
-
-      {AppRenderIf(
-        image != null,
-        <Image style={styles.categoriesPhoto} source={{ uri: image }} />
-      )}
-      {AppRenderIf(
-        image == null,
-        <Image
-          style={styles.categoriesPhoto}
-          source={{
-            uri: "https://firebasestorage.googleapis.com/v0/b/kitchennetwork-cw.appspot.com/o/default.png?alt=media&token=77cfe569-4e3c-45e8-89f2-ce75584ee611",
-          }}
-        />
-      )}
-
+      <Card style={[styles.container, { alignSelf: "center", marginLeft: 0 }]}>
+        {AppRenderIf(
+          image != null,
+          <Card.Cover style={styles.photo} source={{ uri: image }} />
+        )}
+        {AppRenderIf(
+          image == null,
+          <Card.Cover
+            style={styles.photo}
+            source={{
+              uri: "https://firebasestorage.googleapis.com/v0/b/kitchennetwork-cw.appspot.com/o/default.png?alt=media&token=77cfe569-4e3c-45e8-89f2-ce75584ee611",
+            }}
+          />
+        )}
+        <Card.Content>
+          <Title style={styles.title}>{title}</Title>
+          <Paragraph style={styles.category}>{category}</Paragraph>
+        </Card.Content>
+      </Card>
       <View>
         {uploading == true && (
           <>
@@ -178,7 +192,6 @@ export default function NewCategory(props) {
                   mode="contained"
                   onPress={() => {
                     setImage(null);
-                    blob.close();
                   }}
                   title="Change Picture"
                 />
@@ -192,7 +205,7 @@ export default function NewCategory(props) {
                     backgroundColor: Colors.green,
                   }}
                   icon="cloud-upload"
-                  title="Create"
+                  title="Upload"
                   onPress={uploadImage}
                 />
               </View>
@@ -202,35 +215,11 @@ export default function NewCategory(props) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  categoriesItemContainer: {
-    flex: 1,
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "grey",
-    borderWidth: 0.5,
-    borderRadius: 5,
-    overflow: "hidden",
-    backgroundColor: Colors.primary,
-    elevation: 5,
-  },
-  categoriesPhoto: {
-    width: 350,
-    height: 175,
-    alignSelf: "center",
-  },
-  categoriesName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: Colors.white,
-    margin: "3%",
-  },
-  categoriesInfo: {
-    marginBottom: 8,
-  },
+  container: RecipeCard.container,
+  photo: RecipeCard.photo,
+  title: RecipeCard.title,
+  category: RecipeCard.category,
 });

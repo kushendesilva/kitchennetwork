@@ -13,6 +13,7 @@ import IngredientsScreen from "./IngredientsScreen";
 import NewIngredient from "./NewIngredient";
 import SelectIngredients from "./SelectIngredients";
 import NewCategory from "./NewCategory";
+import { SelectImage } from "./SelectImage";
 
 export {
   LoginScreen,
@@ -30,4 +31,5 @@ export {
   NewIngredient,
   SelectIngredients,
   NewCategory,
+  SelectImage,
 };
