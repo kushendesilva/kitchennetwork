@@ -49,7 +49,13 @@ export const AppStack = () => {
         }}
       />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
-      <Stack.Screen name="NewRecipe" component={NewRecipe} />
+      <Stack.Screen
+        name="NewRecipe"
+        component={NewRecipe}
+        options={{
+          title: "New Recipe",
+        }}
+      />
       <Stack.Screen
         name="SelectImage"
         component={SelectImage}

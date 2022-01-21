@@ -7,7 +7,7 @@
 
 <h3 align="left">Resources</h3>
 
-- 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v2.0.0/kitchennetwork.apk" target="blank">**here**</a>
+- 📱 Downloadable APK available <a href="https://github.com/kushenthimira/kitchennetwork/releases/download/v2.1.0/kitchennetwork.apk" target="blank">**here**</a>
 
 |                                                                   |                                                                   |                                                                   |
 | :---------------------------------------------------------------: | :---------------------------------------------------------------: | :---------------------------------------------------------------: |
