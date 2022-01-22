@@ -1,16 +1,38 @@
-import React from "react";
-import { Dimensions, StyleSheet, FlatList } from "react-native";
-import { Title, Paragraph, Appbar, IconButton } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { Dimensions, StyleSheet, FlatList, RefreshControl } from "react-native";
+import {
+  Title,
+  Paragraph,
+  Appbar,
+  IconButton,
+  Snackbar,
+} from "react-native-paper";
 import { View } from "../components";
-import { ListByName } from "../config/database";
-import { Colors, auth } from "../config";
-import { deleteDoc, doc } from "firebase/firestore/lite";
+import { Colors, auth, db } from "../config";
+import { deleteDoc, doc, getDocs, collection } from "firebase/firestore/lite";
 import AppRenderIf from "../config/AppRenderIf";
 
 export default function IngredientsScreen(props) {
   const { navigation } = props;
 
   const checkAdmin = auth.currentUser.email;
+
+  const [refreshing, setRefreshing] = useState(true);
+  const [visibleSnack, setVisibleSnack] = useState(false);
+
+  const onToggleSnackBar = () => setVisibleSnack(!visibleSnack);
+  const onDismissSnackBar = () => setVisibleSnack(false);
+
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    getList();
+  }, []);
+
+  const getList = async () => {
+    const data = await getDocs(collection(db, "ingredients"));
+    setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setRefreshing(false);
+  };
 
   return (
     <View isSafe>
@@ -31,9 +53,23 @@ export default function IngredientsScreen(props) {
           }}
         />
       </Appbar>
+      <Snackbar
+        duration={500}
+        visible={visibleSnack}
+        onDismiss={onDismissSnackBar}
+        style={{
+          width: 150,
+          alignSelf: "center",
+        }}
+      >
+        Deleted Successfully
+      </Snackbar>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getList} />
+        }
         numColumns={2}
-        data={ListByName("ingredients")}
+        data={list}
         keyExtractor={(item) => `${item.id}`}
         renderItem={({ item }) => (
           <>
@@ -54,6 +90,8 @@ export default function IngredientsScreen(props) {
                     onPress={async () => {
                       const userDoc = doc(db, "recipes", item.recipeId);
                       await deleteDoc(userDoc);
+                      onToggleSnackBar();
+                      getList();
                     }}
                   />
                 </>

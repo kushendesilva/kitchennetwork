@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Image, StyleSheet, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  View,
+  RefreshControl,
+} from "react-native";
 import {
   Searchbar,
   Card,
@@ -7,6 +13,7 @@ import {
   Caption,
   Appbar,
   IconButton,
+  Snackbar,
 } from "react-native-paper";
 import { Colors, db, auth } from "../config";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore/lite";
@@ -18,22 +25,29 @@ export default function CategoriesScreen(props) {
 
   const checkAdmin = auth.currentUser.email;
 
+  const [refreshing, setRefreshing] = useState(true);
+  const [visibleSnack, setVisibleSnack] = useState(false);
+
+  const onToggleSnackBar = () => setVisibleSnack(!visibleSnack);
+  const onDismissSnackBar = () => setVisibleSnack(false);
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    const getList = async () => {
-      const data = await getDocs(collection(db, "categories"));
-      setFilteredDataSource(
-        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-      );
-      setMasterDataSource(
-        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-      );
-    };
     getList();
   }, []);
+
+  const getList = async () => {
+    const data = await getDocs(collection(db, "categories"));
+    setFilteredDataSource(
+      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    );
+    setMasterDataSource(
+      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    );
+    setRefreshing(false);
+  };
 
   const searchFilterFunction = (text) => {
     if (text) {
@@ -75,6 +89,8 @@ export default function CategoriesScreen(props) {
               onPress={async () => {
                 const userDoc = doc(db, "categories", item.id);
                 await deleteDoc(userDoc);
+                onToggleSnackBar();
+                getList();
               }}
             />
           </>
@@ -132,20 +148,33 @@ export default function CategoriesScreen(props) {
         )}
       </Appbar>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getList} />
+        }
         ListHeaderComponent={
-          <Searchbar
-            style={{
-              marginTop: "2%",
-              marginBottom: "2%",
-              borderRadius: 10,
-              marginLeft: "2%",
-              marginRight: "2%",
-            }}
-            onChangeText={(text) => searchFilterFunction(text)}
-            onClear={() => searchFilterFunction("")}
-            value={search}
-            placeholder="Search"
-          />
+          <>
+            <Searchbar
+              style={{
+                marginTop: "2%",
+                marginBottom: "2%",
+                borderRadius: 10,
+                marginLeft: "2%",
+                marginRight: "2%",
+              }}
+              onChangeText={(text) => searchFilterFunction(text)}
+              onClear={() => searchFilterFunction("")}
+              value={search}
+              placeholder="Search"
+            />
+            <Snackbar
+              duration={500}
+              visible={visibleSnack}
+              onDismiss={onDismissSnackBar}
+              style={{ width: 200, alignSelf: "flex-end" }}
+            >
+              Deleted Successfully
+            </Snackbar>
+          </>
         }
         data={filteredDataSource}
         renderItem={renderCategory}

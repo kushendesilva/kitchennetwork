@@ -8,18 +8,32 @@ import {
   Title,
   Paragraph,
   IconButton,
+  Snackbar,
 } from "react-native-paper";
-import { FlatList, StyleSheet, View } from "react-native";
-import { getDoc, doc, deleteDoc } from "firebase/firestore/lite";
+import { FlatList, StyleSheet, View, RefreshControl } from "react-native";
+import {
+  getDoc,
+  doc,
+  deleteDoc,
+  query,
+  where,
+  collection,
+  getDocs,
+} from "firebase/firestore/lite";
 import AppRenderIf from "../config/AppRenderIf";
 import { signOut } from "firebase/auth";
 import { auth, Colors, db } from "../config";
 import { View as SafeView } from "../components";
-import { ListWithWhere } from "../config/database";
 import { RecipeCard } from "../config/AppStyles";
 
 export const AccountScreen = (props) => {
   const { navigation } = props;
+
+  const [refreshing, setRefreshing] = useState(true);
+  const [visibleSnack, setVisibleSnack] = useState(false);
+
+  const onToggleSnackBar = () => setVisibleSnack(!visibleSnack);
+  const onDismissSnackBar = () => setVisibleSnack(false);
 
   const userEmail =
     auth.currentUser.email.charAt(0).toUpperCase() +
@@ -34,19 +48,31 @@ export const AccountScreen = (props) => {
   const [user, setUser] = useState([]);
 
   useEffect(() => {
-    const getNote = async () => {
-      const docSnap = await getDoc(doc(db, "users", userID));
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
-        setUser(userData);
-      } else {
-        const userData = ["Empty"];
-        setUser(userData);
-      }
-    };
-
     getNote();
   }, []);
+
+  const getNote = async () => {
+    const docSnap = await getDoc(doc(db, "users", userID));
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      setUser(userData);
+    } else {
+      const userData = ["Empty"];
+      setUser(userData);
+    }
+  };
+
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    getList();
+  }, []);
+
+  const getList = async () => {
+    const q = query(collection(db, "recipes"), where("userId", "==", userID));
+    const querySnapshot = await getDocs(q);
+    setList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setRefreshing(false);
+  };
 
   return (
     <SafeView isSafe>
@@ -74,6 +100,9 @@ export const AccountScreen = (props) => {
         />
       </Appbar>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getList} />
+        }
         numColumns={2}
         ListHeaderComponent={
           <>
@@ -178,9 +207,20 @@ export const AccountScreen = (props) => {
             >
               My Recipes
             </Title>
+            <Snackbar
+              duration={500}
+              visible={visibleSnack}
+              onDismiss={onDismissSnackBar}
+              style={{
+                width: 150,
+                alignSelf: "center",
+              }}
+            >
+              Deleted Successfully
+            </Snackbar>
           </>
         }
-        data={ListWithWhere("recipes", "userId", userID)}
+        data={list}
         keyExtractor={(item) => `${item.id}`}
         renderItem={({ item }) => (
           <Card
@@ -202,6 +242,8 @@ export const AccountScreen = (props) => {
               onPress={async () => {
                 const userDoc = doc(db, "recipes", item.recipeId);
                 await deleteDoc(userDoc);
+                onToggleSnackBar();
+                getList();
               }}
             />
             {AppRenderIf(
